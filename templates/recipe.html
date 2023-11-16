@@ -1,0 +1,120 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+<div class="container">
+    <div class="main-head">
+        <div class="row">
+            <div class="col-md-8 main-head-text">
+                <h1 class="cocktail-title text-white">{{ cocktail.name }}</h1>
+                <p class="cocktail-subtitle text-white">{{ cocktail.user }} | {{ cocktail.created_on }}</p>
+            </div> 
+            <div class="d-none d-md-block col-md-4 main-head-image">
+                {% if "placeholder" in cocktail.featured_image.url %}
+                <img src="https://res.cloudinary.com/dinbzvx8s/image/upload/v1699958086/static/images/cocktail.7062657aa641.jpg" width="100%" alt="green-lime-cocktail">
+                {% else %}
+                <img src=" {{ cocktail.featured_image.url }}"  width="100%">
+                {% endif %} 
+            </div>  
+        </div>
+    </div>
+</div> 
+
+<!-- Cocktail recipe detail -->
+<div class="container">
+    <div class="row">
+        <div class="col card left top">
+            <div class="card-body">
+                <p class="card-text f-6" style="width: 40%;">{{ cocktail.serving | safe }} serving(s) | {{ cocktail.time | safe }}-mins
+                </p>
+                <p class="card-text" style="width: auto;"><span class="card-heading h2">Ingredients:</span>
+                    <p class="card-text" style="width: 45%;">
+                        {{ cocktail.ingredients | safe }}
+                    </p>
+                </p>
+                <p class="card-text" style="width: auto;">     
+                    <span class="card-heading h2">Directions:  </span>     
+                    <p class="card-text" style="width: auto;">
+                        {{ cocktail.directions | safe }}
+                    </p>
+                <div class="row">
+                    <!-- Like button -->
+                    <div class="col-1">
+                        <strong>
+                            {% if user.is_authenticated %} 
+                            <form class="d-inline" action="{% url 'cocktail_like' cocktail.slug %}" method="POST">
+                                {% csrf_token %}
+                                {% if liked %}
+                                <button type="submit" name="cocktail_id" value="{{cocktail.slug}}" class="btn-like"><i class="fas fa-heart"></i></button>
+                                {% else %}
+                                <button type="submit" name="cocktail_id" value="{{cocktail.slug}}" class="btn-like"><i class="far fa-heart"></i></button>
+                                {% endif %}
+                            </form>
+                            {% else %} 
+                            <span class="text-secondary"><i class="far fa-heart"></i></span>
+                            {% endif %}
+                        </strong>
+                        <!-- The number of likes -->
+                        <strong class="text-dark">{{ cocktail.number_of_likes }}</strong>
+                    </div>
+                    <div class="col-1">
+                        {% with comments.count as total_comments %}
+                        <strong class="text-dark"><i class="far fa-comments"></i>
+                            <!-- Total comments-->
+                            {{ total_comments }}</strong>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <hr>
+        </div>
+    </div>
+
+    <!-- Comments -->
+    <div class="row">
+        <div class="col-md-8 card mb-4  mt-3 ">
+            <h3>Comments:</h3>
+            <div class="card-body">
+                {% for comment in comments %}
+                <div class="comments" style="padding: 10px;">
+                    <p class="font-weight-bold">
+                        {{ comment.name }}
+                        <span class=" text-muted font-weight-normal">
+                            {{ comment.created_on }}
+                        </span> wrote:
+                    </p>
+                    <!-- Comment body -->
+                    {{ comment.body | linebreaks }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4 card mb-4  mt-3 ">
+            <div class="card-body">
+                {% if commented %}
+                <div class="alert alert-success alert-dismissible fade show" id="msg" role="alert">
+                    Your comment is awaiting approval
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>   
+                </div>
+                
+                {% else %}
+                <!-- Comment form -->
+                {% if user.is_authenticated %}
+                <h4>Did you make this cocktail? Leave a comment:</h4>
+                <p>Posting as: {{ user.username }}</p>
+                <form method="post" style="margin-top: 1.3em;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-success btn-signup">Submit</button>
+                </form>
+
+                {% endif %}
+                {% endif %} 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
