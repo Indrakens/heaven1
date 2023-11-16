@@ -25,7 +25,7 @@
                                     <p class="card-text">{{ recipe.description }}</p>
                                     {% if user.is_authenticated %}
                                     <div class="recipe-link">
-                                        <a href="#"><i class="fa fa-arrow-right"></i> Get
+                                        <a href="{% url 'recipe' recipe.slug %}"><i class="fa fa-arrow-right"></i> Get
                                             The
                                             {{ recipe.name }} Recipe</a>
                                     </div>
