@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Cocktail column -->
+        <div class="col-12 mt-3 left">
+            <div class="row">
+                {% for recipe in recipe_list %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="image-container">
+                                {% if "placeholder" in recipe.featured_image.url %}
+                                <img class="card-img-top img-thumbnail"
+                                    src="https://res.cloudinary.com/dinbzvx8s/image/upload/v1699958086/static/images/cocktail.7062657aa641.jpg" width="100%" alt="mohito-cocktail-glass">
+                                {% else %}
+                                <img class="card-img-top img-thumbnail" src=" {{ recipe.featured_image.url }}">
+                                {% endif %}
+                                <div class="image-flash">
+                                    <p class="cocktail h6"><strong>Cocktail - {{ recipe.name }}</strong></p>
+                                </div>
+                                <div class="post-link">
+                                    <p class="card-text">{{ recipe.description }}</p>
+                                    {% if user.is_authenticated %}
+                                    <div class="recipe-link">
+                                        <a href="{% url 'recipe' recipe.slug %}"><i class="fa fa-arrow-right"></i> Get
+                                            The
+                                            {{ recipe.name }} Recipe</a>
+                                    </div>
+                                    {% else %}
+                                    <p class="d-grid gap-2 col-12 mx-auto bold"><section>To view {{ recipe.name }} recipe <a
+                                        class="link" href="{% url 'account_login' %}">Login</a> or <a
+                                        class="link" href="{% url 'account_signup' %}">Register</a> an account!</section></p>
+                                    {% endif %}
+                            
+                                </div>
+
+                            </div>
+                            <hr />
+                            <p class="card-text text-muted">{{ recipe.created_on}} <i class="far fa-heart"></i>
+                                {{ recipe.number_of_likes }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+{%endblock%}
