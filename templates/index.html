@@ -25,14 +25,14 @@
                                     <p class="card-text">{{ recipe.description }}</p>
                                     {% if user.is_authenticated %}
                                     <div class="recipe-link">
-                                        <a href="{% url 'recipe' recipe.slug %}"><i class="fa fa-arrow-right"></i> Get
+                                        <a href="#"><i class="fa fa-arrow-right"></i> Get
                                             The
                                             {{ recipe.name }} Recipe</a>
                                     </div>
                                     {% else %}
                                     <p class="d-grid gap-2 col-12 mx-auto bold"><section>To view {{ recipe.name }} recipe <a
-                                        class="link" href="{% url 'account_login' %}">Login</a> or <a
-                                        class="link" href="{% url 'account_signup' %}">Register</a> an account!</section></p>
+                                        class="link" href="#">Login</a> or <a
+                                        class="link" href="#">Register</a> an account!</section></p>
                                     {% endif %}
                             
                                 </div>
